@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Letter Matching Game</title>
+        <link href="https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/animate.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+    </head>
+
+    <body>
+
+        <div class="header">
+            <h1>A + B = C</h1>
+            <p>The letter matching game</p>
+            <div id="infoBtn" class="info-button">?</div>
+        </div>
+
+        <!-- Info Modal -->
+        <div id="infoModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                <span class="close">&times;</span>
+                    <h2>What is this?</h2>
+                </div>
+                <div class="modal-body">
+                    <h4>How to Play</h4>
+                    <p>Your goal is to unlock all the letters of the alphabet (The first two have been unlocked).</p>
+                    <ul>
+                        <li>Click on a letter</li>
+                        <li>Click on another letter</li>
+                        <li>The combination will show up the top</li>
+                        <li>If the combination is successful you will unlock a new letter</li>
+                        <li>Keep going to unlock all the letters</li>
+                    </ul>
+                    <h4>Some information</h4>
+                    <p>This was a quick weekend game built by <a href="https:matthewaisthorpe.com.au">Matthew Aisthorpe</a> using knockout.js to get my head around how to build using Model–view–viewmodel (MVVM) software architectural pattern.</p>
+                    <p>The goal was to build a game that could generate itself when restarted to be different everytime.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- End Game Modal -->
+        <div id="endModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Congratulations!</h2>
+                </div>
+                <div class="modal-body">
+                    <h3>That was a journey wasn't it?</h3>
+                    <h4>Here are some stats:</h4>
+                    <p>Time taken: <span data-bind="text: timerMinutes"></span>:<span data-bind="text: timerSeconds"></span></p>
+                    <p>Attempted Combos: <span data-bind="text: comboHistory().length"></span></p>
+                    <h4>Thank you so much for playing my game!</h4>
+                    <button data-bind="click: restart">Go again?</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="stats">
+                <div class="col-third">
+                    <h3 class="total-count">
+                        <span class="letters-count" data-bind="text: count"></span> / 
+                        <span data-bind="text: alphabet().length"></span>
+                    </h3>
+                </div>
+                <div class="col-third">
+                    <h3 class="equation">
+                        <span class="combo-a" data-bind="text: comboA"></span> + 
+                        <span class="combo-b" data-bind="text: comboB"></span> 
+                        <span class="combo-res" data-bind="text: comboRes"></span> 
+                    </h3>
+                </div>
+                <div class="col-third">
+                    <h3 class="timer">
+                        <span class="timer" data-bind="text: timerMinutes"></span>:<span class="timer" data-bind="text: timerSeconds"></span>
+                    </h3>
+                </div>
+            </div>
+            
+            <div class="letters" data-bind="foreach: alphabet">
+                <div class="letter-button" data-bind="css: {letterfound: found, clicked: clicked, combo: $data.combo.length >= 2} , click: $parent.setCombo">
+                    <div class="letter-content">
+                        <div class="letter-large">
+                            <span data-bind="text: $data.letter"></span>
+                            <small class="letter-combo" data-bind="if: $data.combo.length >= 2">
+                                <span data-bind="text: $data.combo[0]"></span> +
+                                <span data-bind="text: $data.combo[1]"></span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--<ul class="results" data-bind="foreach: comboHistory">
+                <li data-bind="text: $data"></li>
+            </ul>-->
+        </div>
+        <script src="js/modal.js"></script>
+        <script src="js/knockout-3.5.1.js"></script>
+        <script src="js/abc_game.js"></script>
+    </body>
+</html>
