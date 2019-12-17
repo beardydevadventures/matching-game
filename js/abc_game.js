@@ -1,7 +1,7 @@
 //run css animations with javascript
 function animateCSS(element, animationName, callback) {
     const node = document.querySelector(element)
-    node.classList.add('animated', animationName)
+    node.classList.add('animated', 'fastest', animationName)
 
     function handleAnimationEnd() {
         node.classList.remove('animated', animationName)
@@ -79,6 +79,7 @@ var abcGameViewModel = function() {
     self.timerMinutes = ko.observable("00");
     self.timer = ko.observable("");
     self.count = ko.observable(2);
+    self.clicks = ko.observable(0);
 
     //cause im slack split string of alphabet characters
     self.createLetters = function() {
@@ -95,15 +96,29 @@ var abcGameViewModel = function() {
     //when two letters are selected add to combination to check
     self.setCombo = function(item) { 
         if(item.found() == true && item.clicked() == false){
-            if(self.comboA() == "?") {
-                self.comboA(item.letter);
-                item.clicked(true);
-                animateCSS('.combo-a', 'slideInDown');
-            } else if (self.comboB() == "?") {
-                self.comboB(item.letter);
-                item.clicked(true);
-                animateCSS('.combo-b', 'slideInDown');
-                self.checkCombo();
+            self.clicks(self.clicks() + 1);
+            switch (self.clicks()) {
+                case 1:
+                    self.comboA(item.letter);
+                    item.clicked(true);
+                    animateCSS('.combo-a', 'slideInDown');
+                    break;
+                case 2:
+                    self.comboB(item.letter);
+                    item.clicked(true);
+                    animateCSS('.combo-b', 'slideInDown');
+                    self.checkCombo();
+                    break;
+                default:
+                    break;
+                    //if play clicks while animating continue game
+                    console.log('Extra clicks');
+                    self.unlock();
+                    self.reset();
+                    self.comboA(item.letter);
+                    item.clicked(true);
+                    animateCSS('.combo-a', 'slideInDown');
+                    break;
             }
         } else {
             //letter not found yet (make button shake?)
@@ -118,35 +133,36 @@ var abcGameViewModel = function() {
 
         if (result >= 0) {
             let resultVal = self.alphabet()[result];
-            setTimeout(function(){
-                resultVal.found(true);
-                self.comboRes(" = " + resultVal.letter);
-                animateCSS('.combo-res', 'fadeInUp', function() {
-                    setTimeout(function(){
-                        animateCSS('.equation', 'bounceOutRight', function() {
-                            self.comboHistory.unshift(resultString  + " = " + resultVal.letter);
-                            self.reset();
 
-                            self.count(self.count() + 1);
-                            animateCSS('.letters-count', 'pulse');
+            resultVal.found(true);
+            self.comboRes(" = " + resultVal.letter);
+            animateCSS('.combo-res', 'fadeInUp', function() {
+                setTimeout(function(){
+                    animateCSS('.equation', 'bounceOutRight', function() {
+                        self.comboHistory.unshift(resultString  + " = " + resultVal.letter);
+                        self.reset();
 
-                            if(self.count() === 3) {
-                                self.startTimer();
-                            }
-                            if(self.count() == self.alphabet().length) {
-                                self.stopTimer();
-                                var modal = document.getElementById("endModal");
-                                modal.style.display = "block";
-                            }
-                        });
-                    }, 100);
-                });
-            }, 300);
-        } else {
-            animateCSS('.equation', 'fadeOutDown', function() {
-                    self.comboHistory.unshift(resultString);
-                    self.reset();
+                        self.count(self.count() + 1);
+                        animateCSS('.letters-count', 'pulse');
+
+                        if(self.count() === 3) {
+                            self.startTimer();
+                        }
+                        if(self.count() == self.alphabet().length) {
+                            self.stopTimer();
+                            var modal = document.getElementById("endModal");
+                            modal.style.display = "block";
+                        }
+                    });
+                }, 100);
             });
+        } else {
+            setTimeout(function(){
+                animateCSS('.equation', 'fadeOutDown', function() {
+                        self.comboHistory.unshift(resultString);
+                        self.reset();
+                });
+            }, 100);
         }
     };
 
@@ -161,9 +177,16 @@ var abcGameViewModel = function() {
 
     //reset combo params
     self.reset = function() {
-        self.comboA("?");
-        self.comboB("?");
-        self.comboRes("");
+        if( self.comboA() != "?" && self.comboB() != "?" ) {
+            self.clicks(0);
+            self.comboA("?");
+            self.comboB("?");
+            self.comboRes("");
+            self.unlock();
+        }
+    };
+
+    self.unlock = function() {
         self.alphabet().forEach(function(item) {
             item.clicked(false);
         });
