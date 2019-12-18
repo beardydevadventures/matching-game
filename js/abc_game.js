@@ -124,7 +124,6 @@ var abcGameViewModel = function() {
         } else {
             //letter not found yet (make button shake?)
         }
-        console.log(self.alphabet());
     };
 
     //check if combo matchers do some sick animations and icnrease coutners
@@ -183,7 +182,6 @@ var abcGameViewModel = function() {
             letter.remaining(0);
             self.alphabet().forEach(function(item) {
                 if (item.found() == false) {
-                    console.log('not found');
                     if (item.combo[0] == letterString || item.combo[1] == letterString) {
                         letter.remaining(letter.remaining() + 1);
                     }
