@@ -136,6 +136,7 @@ h1, h2, h3, h4 {
     top: calc(60%);
     left: 50%;
     transform: translateX(-50%);
+    width: 100%;
 }
 
 .letterfound .letter-combo {
