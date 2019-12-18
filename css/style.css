@@ -3,10 +3,15 @@
     padding: 0;
     font-family: 'Bebas Neue', cursive;
     -webkit-font-smoothing: antialiased;
+    letter-spacing: 1px;
 }
 
 body {
     background-color: #FEFCFF;
+}
+
+h1, h2, h3, h4 {
+    letter-spacing: 3px;
 }
 
 .header {
@@ -15,6 +20,11 @@ body {
     padding: 13px;
     color: #FEFCFF;
     background-color: #454545;
+}
+
+.header p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
 }
 
 .content {
@@ -114,7 +124,7 @@ body {
     transition: .1s ease-in;
 }
 
-.letter-large>span {
+.letter-large > span {
     display: inline-block;
     transform: translateY(-50%)
 }
@@ -130,6 +140,13 @@ body {
 
 .letterfound .letter-combo {
     display: block;
+}
+
+.remaining-combo {
+    position: absolute;
+    font-size: 16px;
+    top: 7px;
+    right: 8px;
 }
 
 /* Modal Styles */
@@ -159,7 +176,7 @@ body {
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
 }
 
 /* Add Animation */
@@ -199,6 +216,19 @@ body {
     padding: 16px;
     line-height: 30px;
 }
+
+.modal-body h4 {
+    font-size: 20px;
+}
+
+.modal-body h4:not(:first-child) {
+    padding-top: 17px;
+}
+
+.modal-body p, .modal-body a, .modal-body li {
+    font-family: 'Montserrat', sans-serif;
+}
+
 .modal-body ul {
     padding-left: 20px;
 }

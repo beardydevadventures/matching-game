@@ -14,7 +14,7 @@ function animateCSS(element, animationName, callback) {
 }
 
 //adds additional 0 to timer text
-function pad(val) {
+function numberPadding(val) {
     var valString = val + "";
     if (valString.length < 2) {
         return "0" + valString;
@@ -55,6 +55,7 @@ function generateLetterCombo(max, alphabet) {
 var abcItemViewModel = function(item, index, alphabet) {
     let self = this;
     self.letter = item;
+    self.remaining = ko.observable(0);
     if(index > 1) {
         self.found = ko.observable(false);
         self.combo = generateLetterCombo(index, alphabet);
@@ -123,6 +124,7 @@ var abcGameViewModel = function() {
         } else {
             //letter not found yet (make button shake?)
         }
+        console.log(self.alphabet());
     };
 
     //check if combo matchers do some sick animations and icnrease coutners
@@ -175,6 +177,21 @@ var abcGameViewModel = function() {
         });
     };
 
+    self.remainingCombos = function() {
+        self.alphabet().forEach(function(letter) {
+            let letterString = letter.letter;
+            letter.remaining(0);
+            self.alphabet().forEach(function(item) {
+                if (item.found() == false) {
+                    console.log('not found');
+                    if (item.combo[0] == letterString || item.combo[1] == letterString) {
+                        letter.remaining(letter.remaining() + 1);
+                    }
+                }
+            });
+        });
+    };
+
     //reset combo params
     self.reset = function() {
         if( self.comboA() != "?" && self.comboB() != "?" ) {
@@ -183,6 +200,7 @@ var abcGameViewModel = function() {
             self.comboB("?");
             self.comboRes("");
             self.unlock();
+            self.remainingCombos();
         }
     };
 
@@ -202,8 +220,8 @@ var abcGameViewModel = function() {
         let timerCount = 0;
         self.timer = setInterval(function() {
             timerCount++;
-            self.timerSeconds(pad(timerCount % 60));
-            self.timerMinutes(pad(parseInt(timerCount / 60)));
+            self.timerSeconds(numberPadding(timerCount % 60));
+            self.timerMinutes(numberPadding(parseInt(timerCount / 60)));
         }, 1000);
     }
     self.stopTimer = function() {

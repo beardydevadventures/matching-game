@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Letter Matching Game</title>
-        <link href="https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Bebas+Neue|Montserrat&display=swap" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="css/animate.css">
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
@@ -24,7 +24,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                 <span class="close">&times;</span>
-                    <h2>What is this?</h2>
+                    <h2>About this game</h2>
                 </div>
                 <div class="modal-body">
                     <h4>How to Play</h4>
@@ -36,9 +36,15 @@
                         <li>If the combination is successful you will unlock a new letter</li>
                         <li>Keep going to unlock all the letters</li>
                     </ul>
-                    <h4>Some information</h4>
-                    <p>This was a quick weekend game built by <a href="https:matthewaisthorpe.com.au">Matthew Aisthorpe</a> using knockout.js to get my head around how to build using Model–view–viewmodel (MVVM) software architectural pattern.</p>
-                    <p>The goal was to build a game that could generate itself when restarted to be different everytime.</p>
+                    <p>The letter combinations will be different, they are generated every game.</p>
+                    <h4>Hints</h4>
+                    <ul>
+                        <li>Number in the top right is how many combinations are left</li>
+                        <li>Doesn't matter which letter is first, A+B and B+A are treated the same combo</li>
+                    </ul>
+                    <h4>Why did I make this?</h4>
+                    <p>This game was a quick weekend game built by <a href="https:matthewaisthorpe.com.au">Matthew Aisthorpe</a> using knockout.js to get a better understand of how to build using Model–view–viewmodel (MVVM) software architectural pattern.</p>
+                    <p>The goal was to build a game using a MVVM framework that could generate combinations for future letters without reusing pre-existing comibinations or prevent the player winning.</p>
                 </div>
             </div>
         </div>
@@ -91,6 +97,9 @@
                             <small class="letter-combo" data-bind="if: $data.combo.length >= 2">
                                 <span data-bind="text: $data.combo[0]"></span> +
                                 <span data-bind="text: $data.combo[1]"></span>
+                            </small>
+                            <small class="remaining-combo" data-bind="if: $data.remaining() > 0 && $data.found()">
+                                <span data-bind="text: $data.remaining()"></span>
                             </small>
                         </div>
                     </div>
